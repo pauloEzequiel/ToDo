@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ToDo.Application.Dtos.Item.ItemResrponseDto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+    <a asp-action="Create">Adicionar tarefa</a>
+</p>
+
+<table id="item" class="table">
+    <thead>
+        <tr class="">
+            <th>Descrição</th>
+            <th>Data de criação</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Description</td>
+                <td>@item.Created</td>
+                <td>@Html.CheckBox("Done", item.Done, new {onchange = $"checkedChanged('{item.Id}')" })</td>
+                <td><a asp-action="delete" class="btn btn-danger" asp-route-id="@item.Id">Delete</a> </td>
+             
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    var checkedChanged = function (itemId) {
+        
+        $.ajax({
+            url: '/check/'+itemId,
+            datatype: 'json',
+            contentType: "application/json; charset=utf-8",
+            type: "GET",
+            data: {id:itemId},
+            success: function (data) {
+                alert('sucesso!!');
+            },
+            error: function (error) {
+                
+            }
+        });
+    }
+</script>
